@@ -1,42 +1,25 @@
 version: '3.8'
 
 services:
-  # The AI Engine (Optimized for 3 Cores / 16GB RAM)
   ollama:
     image: ollama/ollama:latest
     container_name: ollama
+    environment:
+      - OLLAMA_HOST=0.0.0.0        # IMPORTANT: Allows external connections
+      - TZ=Asia/Kolkata
     volumes:
       - ollama_data:/root/.ollama
     ports:
-      - "11434:11434"
-    # Automatically pulls Gemma 4 Edge 2B on startup
+      - "11434:11434"              # Exposes port to the VPS
+    # Auto-pulls Gemma 4 Edge 2B on startup
     entrypoint: >
       sh -c "ollama serve & sleep 5 && ollama pull gemma4:e2b && wait"
     deploy:
       resources:
         limits:
-          cpus: '2.2'         # Uses 2.2 cores for AI, leaves ~0.8 for the system
-          memory: 6G          # Allocated 6GB for model overhead and context
-    restart: unless-stopped
-
-  # The OpenClaw Research Instance
-  openclaw:
-    image: openclaw/openclaw:latest
-    container_name: openclaw
-    depends_on:
-      - ollama
-    environment:
-      - OLLAMA_BASE_URL=http://ollama:11434
-      - TZ=Asia/Kolkata
-    volumes:
-      # Your IMDAA hydrological data mount
-      - /mnt/imdaa-storage:/app/app/storage
-      # Persistent folder for OpenClaw config/sessions
-      - openclaw_config:/data
-    ports:
-      - "18789:18789"
+          cpus: '2.5'              # Optimized for your 3-core setup
+          memory: 8G               # Leaves plenty of room for 16GB RAM
     restart: unless-stopped
 
 volumes:
-  ollama_data:      # Stores Gemma 4 models
-  openclaw_config:  # Stores WhatsApp sessions & API keys
+  ollama_data:
