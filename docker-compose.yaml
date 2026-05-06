@@ -17,8 +17,10 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '2.5'              # Optimized for your 3-core setup
-          memory: 8G               # Leaves plenty of room for 16GB RAM
+          cpus: '2.5'
+          memory: 10G    # Increased to handle the 7.2GB model
+        reservations:
+          memory: 8G     # Guarantees the container has enough to start
     restart: unless-stopped
 
 volumes:
