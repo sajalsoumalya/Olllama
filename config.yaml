@@ -1,0 +1,38 @@
+model_list:
+
+  ########################################
+  # OPUS
+  ########################################
+
+  - model_name: opus
+
+    litellm_params:
+      model: os.environ/MODEL_OPUS
+      api_base: https://integrate.api.nvidia.com/v1
+      api_key: os.environ/NVIDIA_API_KEY
+
+  ########################################
+  # SONNET
+  ########################################
+
+  - model_name: sonnet
+
+    litellm_params:
+      model: os.environ/MODEL_SONNET
+      api_key: os.environ/OPENROUTER_API_KEY
+
+  ########################################
+  # HAIKU
+  ########################################
+
+  - model_name: haiku
+
+    litellm_params:
+      model: os.environ/MODEL_HAIKU
+      api_key: os.environ/DEEPSEEK_API_KEY
+
+general_settings:
+  master_key: os.environ/LITELLM_MASTER_KEY
+
+router_settings:
+  routing_strategy: simple-shuffle
